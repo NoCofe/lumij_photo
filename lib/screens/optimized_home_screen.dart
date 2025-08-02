@@ -6,6 +6,7 @@ import '../providers/optimized_photo_provider.dart';
 import '../widgets/photo_grid.dart';
 import '../widgets/stats_card.dart';
 import '../models/photo_model.dart';
+import 'similar_photos_screen.dart';
 
 class OptimizedHomeScreen extends StatefulWidget {
   const OptimizedHomeScreen({super.key});
@@ -211,11 +212,14 @@ class _OptimizedHomeScreenState extends State<OptimizedHomeScreen> {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: StatsCard(
-              title: '重复照片',
-              count: provider.duplicatePhotos.length,
-              icon: CupertinoIcons.doc_on_doc,
-              color: CupertinoColors.systemOrange,
+            child: GestureDetector(
+              onTap: () => _navigateToSimilarPhotos(),
+              child: StatsCard(
+                title: '相似照片',
+                count: provider.duplicatePhotos.length,
+                icon: CupertinoIcons.rectangle_stack,
+                color: CupertinoColors.systemOrange,
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -305,10 +309,6 @@ class _OptimizedHomeScreenState extends State<OptimizedHomeScreen> {
           'all': Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text('全部'),
-          ),
-          'duplicates': Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text('重复'),
           ),
           'large': Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
@@ -521,6 +521,14 @@ class _OptimizedHomeScreenState extends State<OptimizedHomeScreen> {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  void _navigateToSimilarPhotos() {
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+        builder: (context) => const SimilarPhotosScreen(),
       ),
     );
   }

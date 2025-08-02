@@ -137,14 +137,7 @@ class OptimizedPhotoProvider with ChangeNotifier {
             pageSize: _pageSize,
           );
           break;
-        case 'duplicates':
-          if (_currentPage == 0) {
-            newPhotos = await DatabaseService.getDuplicatePhotos();
-            _hasMorePhotos = false; // 重复照片一次性加载完
-          } else {
-            newPhotos = [];
-          }
-          break;
+        // duplicates功能已移动到相似照片页面
         default:
           newPhotos = await OptimizedPhotoService.getPhotosWithPagination(
             page: _currentPage,
