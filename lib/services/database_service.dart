@@ -86,13 +86,43 @@ class DatabaseService {
     return List.generate(maps.length, (i) => PhotoModel.fromMap(maps[i]));
   }
   
-  static Future<List<PhotoModel>> getPhotosBySize({int limit = 50}) async {
+  static Future<List<PhotoModel>> getPhotosBySize({
+    int page = 0,
+    int pageSize = 50,
+  }) async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'photos',
       where: 'isDeleted = 0',
       orderBy: 'size DESC',
-      limit: limit,
+      limit: pageSize,
+      offset: page * pageSize,
+    );
+    return List.generate(maps.length, (i) => PhotoModel.fromMap(maps[i]));
+  }
+
+  // 获取照片总数
+  static Future<int> getTotalPhotosCount() async {
+    final db = await database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as count FROM photos WHERE isDeleted = 0'
+    );
+    return result.first['count'] as int;
+  }
+
+  // 分页获取所有照片
+  static Future<List<PhotoModel>> getPhotosWithPagination({
+    int page = 0,
+    int pageSize = 50,
+    String orderBy = 'dateTime DESC',
+  }) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'photos',
+      where: 'isDeleted = 0',
+      orderBy: orderBy,
+      limit: pageSize,
+      offset: page * pageSize,
     );
     return List.generate(maps.length, (i) => PhotoModel.fromMap(maps[i]));
   }
